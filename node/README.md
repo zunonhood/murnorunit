@@ -47,6 +47,4 @@ Remove MURNO_RUN_ONCE to run continuously. Logs are newline-delimited JSON.
 RPC and trainer failures use exponential backoff. The block cursor advances
 only after the complete safe range is decoded and state is persisted.
 
-Runtime addresses are intentionally supplied through environment variables
-rather than hardcoded into the node. The pool, policy and genesis block remain
-unpublished.
+No contract, pool, policy or genesis block is bundled before deployment.

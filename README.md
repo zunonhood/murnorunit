@@ -47,9 +47,8 @@ Run the private-model tests:
 
 Murno is pre-genesis. The Robinhood Chain reference protocol, continuous EVM
 node, private model, recovery system and signed epoch verifier are implemented
-and tested. The verified token contract is published in the public interface.
-No pool address, production policy, genesis block or live Murno training
-history is published yet.
+and tested. No token contract, pool address, production policy, genesis block
+or live Murno training history is published in this repository.
 
 Runtime secrets, private signing keys, model checkpoints and node data must
 never be committed.
