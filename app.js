@@ -433,6 +433,7 @@ const tokenDock = document.querySelector('#token-dock');
 const tokenPanel = document.querySelector('#token-panel');
 const tokenToggle = document.querySelector('.token-dock-toggle');
 const tokenClose = document.querySelector('[data-close-token]');
+const copyCaButton = document.querySelector('[data-copy-ca]');
 
 function setTokenPanel(open) {
   tokenDock.classList.toggle('open', open);
@@ -444,6 +445,29 @@ tokenToggle.addEventListener('click', () => {
   setTokenPanel(!tokenDock.classList.contains('open'));
 });
 tokenClose.addEventListener('click', () => setTokenPanel(false));
+copyCaButton.addEventListener('click', async () => {
+  const address = copyCaButton.dataset.ca;
+  try {
+    await navigator.clipboard.writeText(address);
+  } catch {
+    const input = document.createElement('textarea');
+    input.value = address;
+    input.setAttribute('readonly', '');
+    input.style.position = 'fixed';
+    input.style.opacity = '0';
+    document.body.append(input);
+    input.select();
+    document.execCommand('copy');
+    input.remove();
+  }
+  const label = copyCaButton.querySelector('span');
+  label.textContent = 'COPIED';
+  copyCaButton.classList.add('copied');
+  window.setTimeout(() => {
+    label.textContent = 'COPY';
+    copyCaButton.classList.remove('copied');
+  }, 1400);
+});
 document.addEventListener('click', event => {
   if (tokenDock.classList.contains('open') && !tokenDock.contains(event.target)) {
     setTokenPanel(false);

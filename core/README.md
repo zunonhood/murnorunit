@@ -38,8 +38,9 @@ because EVM venues can route swaps through different contracts. The reference
 decoder uses actual ERC-20 Transfer logs and pool balances rather than
 displayed prices or fabricated activity.
 
-The core does not include hidden production thresholds. The token contract,
-pool, production policy and genesis block must be published when finalized.
+The core does not include hidden production thresholds. The token contract is
+published in the interface; the pool, production policy and genesis block must
+be published when finalized.
 
 ## Run tests
 
