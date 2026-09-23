@@ -428,6 +428,33 @@ document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && !repoOverlay.hidden) closeRepoExplorer();
 });
 
+const tokenDock = document.querySelector('#token-dock');
+const tokenPanel = document.querySelector('#token-panel');
+const tokenToggle = document.querySelector('.token-dock-toggle');
+const tokenClose = document.querySelector('[data-close-token]');
+
+function setTokenPanel(open) {
+  tokenDock.classList.toggle('open', open);
+  tokenToggle.setAttribute('aria-expanded', String(open));
+  tokenPanel.setAttribute('aria-hidden', String(!open));
+}
+
+tokenToggle.addEventListener('click', () => {
+  setTokenPanel(!tokenDock.classList.contains('open'));
+});
+tokenClose.addEventListener('click', () => setTokenPanel(false));
+document.addEventListener('click', event => {
+  if (tokenDock.classList.contains('open') && !tokenDock.contains(event.target)) {
+    setTokenPanel(false);
+  }
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && tokenDock.classList.contains('open')) {
+    setTokenPanel(false);
+    tokenToggle.focus();
+  }
+});
+
 if (window.location.hash) {
   window.setTimeout(() => {
     const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));

@@ -9,7 +9,7 @@
   <link rel='icon' type='image/png' sizes='600x600' href='murno.png?v=20260923-1'>
   <link rel='shortcut icon' type='image/png' href='murno.png?v=20260923-1'>
   <link rel='apple-touch-icon' href='murno.png?v=20260923-1'>
-  <link rel='stylesheet' href='styles.css?v=20260923-22'>
+  <link rel='stylesheet' href='styles.css?v=20260923-23'>
 </head>
 <body>
 <header class='topbar'>
@@ -76,11 +76,6 @@
         <div><b>Train</b><span>update the private model</span></div><i>&rarr;</i>
         <div><b>Verify</b><span>sign the new epoch</span></div>
       </div>
-    </div>
-    <div class='hero-meta'>
-      <span><b>NETWORK</b> SOLANA</span>
-      <span><b>PHASE</b> PRE-GENESIS</span>
-      <span><b>MINT</b> NOT PUBLISHED</span>
     </div>
   </section>
 
@@ -314,7 +309,41 @@
   </section>
 </main>
 
+<aside class='token-dock' id='token-dock'>
+  <section class='token-panel' id='token-panel' aria-hidden='true' aria-labelledby='token-panel-title'>
+    <div class='token-banner'>
+      <img src='token-panel-banner.webp' alt='Murno token banner'>
+      <div class='token-banner-shade'></div>
+      <div class='token-banner-copy'>
+        <span>ASSET PROFILE</span>
+        <strong id='token-panel-title'>MURNO</strong>
+      </div>
+      <button class='token-panel-close' type='button' aria-label='Close token information' data-close-token>&times;</button>
+    </div>
+    <div class='token-data'>
+      <div class='token-data-row'>
+        <span>NETWORK</span>
+        <strong><i class='token-status-dot'></i>SOLANA</strong>
+      </div>
+      <div class='token-data-row'>
+        <span>PHASE</span>
+        <strong>PRE-GENESIS</strong>
+      </div>
+      <div class='token-data-row token-ca-row'>
+        <span>CA</span>
+        <strong>NOT PUBLISHED</strong>
+      </div>
+    </div>
+    <p class='token-safety'>The official contract address will appear here after verification. Treat every address published elsewhere as unaffiliated.</p>
+  </section>
+  <button class='token-dock-toggle' type='button' aria-controls='token-panel' aria-expanded='false'>
+    <img src='murno.png' alt='' aria-hidden='true'>
+    <span><small>MURNO</small>TOKEN INFO</span>
+    <svg viewBox='0 0 20 20' aria-hidden='true'><path d='m6.5 8 3.5 3.5L13.5 8'/></svg>
+  </button>
+</aside>
+
 <footer><div class='footer-inner'><span>&copy; 2026 Murno</span><span>Market-trained intelligence</span><span>Solana</span></div></footer>
-<script src='app.js?v=20260923-21'></script>
+<script src='app.js?v=20260923-22'></script>
 </body>
 </html>
