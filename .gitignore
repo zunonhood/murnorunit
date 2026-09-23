@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+data/
+runtime/
+checkpoints/
+*.pem
+*.key
+*.tmp
+.DS_Store
+Thumbs.db
+.edge-*/
+.chrome-*/
+*-review.png
+chart-*.png

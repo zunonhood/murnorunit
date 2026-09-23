@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name='description' content='Murno is a private AI model trained by validated Solana market behavior, with a public and verifiable learning history.'>
+  <meta name='theme-color' content='#000000'>
+  <title>Murno - The market trains the model</title>
+  <link rel='icon' type='image/png' sizes='600x600' href='murno.png?v=20260923-1'>
+  <link rel='shortcut icon' type='image/png' href='murno.png?v=20260923-1'>
+  <link rel='apple-touch-icon' href='murno.png?v=20260923-1'>
+  <link rel='stylesheet' href='styles.css?v=20260923-22'>
+</head>
+<body>
+<header class='topbar'>
+  <div class='nav'>
+    <a class='brand glass-control' href='#top'>Murno</a>
+    <nav class='socials' aria-label='Project links'>
+      <a class='social-button glass-control' href='https://x.com/murnorunit' target='_blank' rel='noreferrer' aria-label='Murno on X'>
+        <svg viewBox='0 0 24 24' aria-hidden='true'><path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.451-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z'/></svg>
+        <span>Twitter</span>
+      </a>
+      <button class='social-button glass-control github-trigger' type='button' aria-label='Open Murno source explorer'>
+        <svg viewBox='0 0 24 24' aria-hidden='true'><path d='M12 2.8a9.4 9.4 0 0 0-3 18.3c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 0 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .8.1-.7.4-1.1.7-1.3-2.2-.3-4.6-1.1-4.6-4.7 0-1 .4-1.9 1-2.5-.1-.3-.4-1.3.1-2.5 0 0 .8-.3 2.6 1a9 9 0 0 1 4.8 0c1.8-1.3 2.6-1 2.6-1 .5 1.2.2 2.2.1 2.5.7.7 1 1.5 1 2.5 0 3.6-2.3 4.4-4.5 4.7.4.3.7.9.7 1.7v2.5c0 .3.2.6.7.5A9.4 9.4 0 0 0 12 2.8Z'/></svg>
+        <span>Source</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class='repo-overlay' id='repo-overlay' hidden>
+  <section class='repo-modal' role='dialog' aria-modal='true' aria-labelledby='repo-title'>
+    <header class='repo-modal-head'>
+      <div><span>LOCAL SOURCE EXPLORER</span><h2 id='repo-title'>Murno / source</h2></div>
+      <button class='repo-close' type='button' data-close-repo aria-label='Close source explorer'>&times;</button>
+    </header>
+    <div class='repo-browser'>
+      <aside class='repo-sidebar'>
+        <label for='repo-search'>PROJECTS</label>
+        <input id='repo-search' type='search' placeholder='Filter projects' autocomplete='off'>
+        <div class='repo-list' id='repo-list'><p class='repo-message'>Local projects are ready.</p></div>
+      </aside>
+      <section class='repo-workspace'>
+        <div class='repo-toolbar'>
+          <nav class='repo-breadcrumb' id='repo-breadcrumb' aria-label='Source path'><span>Select a project</span></nav>
+          <span id='repo-open-file'>LOCAL SOURCE</span>
+        </div>
+        <div class='repo-content'>
+          <div class='file-list' id='file-list'><p class='repo-message'>Choose a project to browse its files.</p></div>
+          <div class='code-view'>
+            <header><span id='code-file-name'>NO FILE SELECTED</span><span id='code-file-meta'>LOCAL SOURCE</span></header>
+            <div class='code-scroll'>
+              <pre class='line-numbers' id='line-numbers' aria-hidden='true'></pre>
+              <pre><code id='code-output'>Select a file from the source tree.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer class='repo-modal-foot'><span>MURNO SOURCE / READ-ONLY</span><span id='repo-api-state'>LOCAL / READY</span></footer>
+  </section>
+</div>
+
+<main id='top'>
+  <section class='glass-panel hero'>
+    <img class='hero-mark' src='murno.png' alt='Murno logo'>
+    <p class='eyebrow'>A MARKET-TRAINED AI AGENT ON SOLANA</p>
+    <h1>The market trains Murno.</h1>
+    <p class='hero-copy'>Murno is a private AI model that learns from validated behavior around its own token. Its internal state stays private. Its learning history remains public and verifiable.</p>
+    <div class='definition-card inner-glass'>
+      <span class='micro-label'>THE GENESIS MECHANISM</span>
+      <p>The first 1,000 valid market signals shape Murno's initial preference state. A transaction is not automatically a signal. It must survive public rules for independence, persistence, liquidity and manipulation resistance before it can influence training.</p>
+      <div class='definition-flow' aria-label='Murno system summary'>
+        <div><b>Observe</b><span>confirmed market behavior</span></div><i>&rarr;</i>
+        <div><b>Filter</b><span>reject weak or linked activity</span></div><i>&rarr;</i>
+        <div><b>Train</b><span>update the private model</span></div><i>&rarr;</i>
+        <div><b>Verify</b><span>sign the new epoch</span></div>
+      </div>
+    </div>
+    <div class='hero-meta'>
+      <span><b>NETWORK</b> SOLANA</span>
+      <span><b>PHASE</b> PRE-GENESIS</span>
+      <span><b>MINT</b> NOT PUBLISHED</span>
+    </div>
+  </section>
+
+  <section class='glass-panel' id='overview'>
+    <header class='section-heading'>
+      <p class='section-label'>MURNO IN PLAIN ENGLISH</p>
+      <h2>A token that acts as the Agent's sensory system.</h2>
+      <p>People do not vote on Murno's next answer. Their market behavior creates evidence. Murno learns only from the evidence its public signal engine accepts.</p>
+    </header>
+    <div class='concept-grid'>
+      <article class='inner-glass'><span>01</span><h3>The token is the sensor.</h3><p>Buying, selling, holding and returning create observable consequences instead of cost-free opinions.</p></article>
+      <article class='inner-glass'><span>02</span><h3>The signal engine is the filter.</h3><p>Related wallets, rapid reversals, weak liquidity and repeated events are grouped, reduced or rejected.</p></article>
+      <article class='inner-glass'><span>03</span><h3>The model is the learner.</h3><p>Accepted aggregate features update a private market-preference representation. No wallet can directly edit the model.</p></article>
+    </div>
+    <aside class='truth-note'><strong>What exists now</strong><p>The reference protocol, continuous Solana node, private training model, recovery system and signed epoch verifier are implemented and testable. The token, pool, production policy and genesis slot are not yet published.</p></aside>
+  </section>
+
+  <section class='glass-panel' id='how'>
+    <header class='section-heading'>
+      <p class='section-label'>THE WORKING PIPELINE</p>
+      <h2>From a confirmed Solana transaction to a signed learning epoch.</h2>
+      <p>The current implementation closes the full software loop without displaying simulated Murno activity.</p>
+    </header>
+    <div class='pipeline' aria-label='Murno runtime pipeline'>
+      <article><span>01 / READ</span><h3>Follow the real pool address</h3><p>The node paginates confirmed signatures and resumes from a durable cursor.</p><small>RPC failures do not advance the cursor.</small></article>
+      <article><span>02 / DECODE</span><h3>Measure balance changes</h3><p>Opposing target-token and quote-token balance changes identify candidate trades.</p><small>Pool quote balance supplies the liquidity observation.</small></article>
+      <article><span>03 / VALIDATE</span><h3>Build and test a slot window</h3><p>Duplicate events are removed and aggregate behavior is checked against a versioned policy.</p><small>Signals are accepted, reduced or rejected.</small></article>
+      <article><span>04 / TRAIN</span><h3>Update the private model</h3><p>Only accepted aggregate features cross the private training boundary.</p><small>Raw wallets and private weights are not published.</small></article>
+      <article><span>05 / PUBLISH</span><h3>Commit and sign the epoch</h3><p>The record links to the previous epoch and is signed with Ed25519.</p><small>Third parties can detect tampering or a broken history.</small></article>
+    </div>
+    <div class='explain-grid'>
+      <article class='inner-glass'><h3>Confirmed plus a safety lag</h3><p>The node reads confirmed transactions, then waits a configurable number of additional slots before closing a learning window.</p></article>
+      <article class='inner-glass'><h3>Failure-safe by design</h3><p>Pending observations, position state and the last processed signature survive restart. An incomplete poll cannot silently skip history.</p></article>
+    </div>
+  </section>
+
+  <section class='glass-panel' id='signals'>
+    <header class='section-heading'>
+      <p class='section-label'>WHAT EARNS TRAINING WEIGHT</p>
+      <h2>Volume alone is not preference.</h2>
+      <p>Murno compares several facts together. Final production thresholds will be fixed in a versioned policy before genesis.</p>
+    </header>
+    <div class='signal-table' role='table' aria-label='Market signal evaluation'>
+      <div class='signal-row signal-head' role='row'><span>Observation</span><span>What it asks</span><span>How it is used</span></div>
+      <div class='signal-row' role='row'><b>Persistence</b><p>Did the behavior survive beyond the initial trade?</p><p>Longer holding supports conviction; immediate exits weaken it.</p></div>
+      <div class='signal-row' role='row'><b>Independent actors</b><p>Does activity represent distinct participants?</p><p>Related activity is grouped before influence is calculated.</p></div>
+      <div class='signal-row' role='row'><b>Concentration</b><p>Is notional distributed or controlled by a small cluster?</p><p>Concentrated windows lose confidence or fail validation.</p></div>
+      <div class='signal-row' role='row'><b>Liquidity</b><p>Was meaningful market capacity available?</p><p>Thin conditions cannot create unlimited training power.</p></div>
+      <div class='signal-row' role='row'><b>Reversal</b><p>Did positions rapidly change direction?</p><p>Fast reversals are treated as weaker evidence.</p></div>
+    </div>
+    <div class='decision-map'>
+      <article class='accepted'><span>ACCEPTED</span><p>Receives bounded training influence.</p></article>
+      <article class='reduced'><span>REDUCED</span><p>Enters training with lower influence.</p></article>
+      <article class='rejected'><span>REJECTED</span><p>Does not train the model.</p></article>
+    </div>
+    <figure class='technical-figure signal-fusion' aria-labelledby='signal-fusion-title'>
+      <figcaption><span id='signal-fusion-title'>SIGNAL FUSION TOPOLOGY</span><b>SCHEMA / NO LIVE VALUES</b></figcaption>
+      <svg viewBox='0 0 720 300' role='img' aria-label='Five market features enter a validation core and produce accepted, reduced or rejected output'>
+        <g class='chart-links'>
+          <path d='M154 46H258L306 116'/><path d='M154 98H274L306 132'/><path d='M154 150H306'/>
+          <path d='M154 202H274L306 168'/><path d='M154 254H258L306 184'/>
+          <path d='M414 150H512'/><path d='M512 150L566 68'/><path d='M512 150H566'/><path d='M512 150L566 232'/>
+        </g>
+        <g class='chart-inputs'>
+          <g transform='translate(24 28)'><rect width='130' height='36' rx='8'/><text x='14' y='22'>PERSISTENCE</text></g>
+          <g transform='translate(24 80)'><rect width='130' height='36' rx='8'/><text x='14' y='22'>INDEPENDENCE</text></g>
+          <g transform='translate(24 132)'><rect width='130' height='36' rx='8'/><text x='14' y='22'>CONCENTRATION</text></g>
+          <g transform='translate(24 184)'><rect width='130' height='36' rx='8'/><text x='14' y='22'>LIQUIDITY</text></g>
+          <g transform='translate(24 236)'><rect width='130' height='36' rx='8'/><text x='14' y='22'>REVERSAL</text></g>
+        </g>
+        <g class='chart-core'><rect x='306' y='108' width='108' height='84' rx='16'/><text x='360' y='142'>VALIDATION</text><text x='360' y='160'>CORE</text><text class='chart-sub' x='360' y='178'>BOUNDED</text></g>
+        <g class='chart-gate'><circle cx='512' cy='150' r='22'/><text x='512' y='154'>Q</text></g>
+        <g class='chart-outputs'>
+          <g transform='translate(566 48)' class='out-accept'><rect width='130' height='40' rx='9'/><text x='15' y='24'>ACCEPTED</text></g>
+          <g transform='translate(566 130)' class='out-reduce'><rect width='130' height='40' rx='9'/><text x='15' y='24'>REDUCED</text></g>
+          <g transform='translate(566 212)' class='out-reject'><rect width='130' height='40' rx='9'/><text x='15' y='24'>REJECTED</text></g>
+        </g>
+      </svg>
+      <p>Inputs are evaluated together. No feature, wallet or transaction can select an output by itself.</p>
+    </figure>
+  </section>
+
+  <section class='glass-panel' id='genesis'>
+    <header class='section-heading'>
+      <p class='section-label'>THE FIRST 1,000 VALID SIGNALS</p>
+      <h2>Murno's initial mind forms in public.</h2>
+      <p>The critical period counts validated signals, not transactions, wallets or holders. Early accepted evidence will receive the strongest relative weight; later learning becomes progressively more stable.</p>
+    </header>
+    <div class='learning-period inner-glass'>
+      <div class='period-labels'><span>GENESIS</span><span>VALID SIGNAL 1</span><span>VALID SIGNAL 1,000</span><span>CONTINUOUS LEARNING</span></div>
+      <div class='period-track'><i class='critical-band'></i><i class='stable-band'></i></div>
+      <div class='period-copy'><div><b>Higher plasticity</b><p>Initial accepted evidence establishes the first preference state.</p></div><div><b>Greater stability</b><p>New evidence continues to matter without constantly rewriting identity.</p></div></div>
+    </div>
+    <figure class='technical-figure genesis-chart' aria-labelledby='genesis-chart-title'>
+      <figcaption><span id='genesis-chart-title'>GENESIS INFLUENCE ENVELOPE</span><b>SPECIFICATION / EXACT CURVE PENDING</b></figcaption>
+      <svg viewBox='0 0 720 300' role='img' aria-label='Conceptual envelope showing higher plasticity during the first one thousand valid signals and greater stability afterward'>
+        <defs>
+          <linearGradient id='genesis-fill' x1='0' x2='1'><stop offset='0' stop-color='#8fc2e8' stop-opacity='.34'/><stop offset='.66' stop-color='#b69aca' stop-opacity='.16'/><stop offset='1' stop-color='#ffffff' stop-opacity='.03'/></linearGradient>
+          <pattern id='genesis-grid' width='36' height='32' patternUnits='userSpaceOnUse'><path d='M36 0H0V32' fill='none' stroke='rgba(255,255,255,.055)' stroke-width='1'/></pattern>
+        </defs>
+        <rect x='72' y='24' width='608' height='220' rx='10' fill='url(#genesis-grid)'/>
+        <path class='genesis-area' d='M72 62C180 70 270 92 362 132S490 184 680 194V226H72Z' fill='url(#genesis-fill)'/>
+        <path class='genesis-upper' d='M72 48C180 58 270 80 362 120S490 172 680 182'/>
+        <path class='genesis-lower' d='M72 82C180 92 270 114 362 152S490 204 680 214'/>
+        <line class='genesis-marker' x1='472' y1='24' x2='472' y2='244'/>
+        <text class='axis-label' x='24' y='44'>HIGHER</text><text class='axis-label' x='26' y='232'>STABLE</text>
+        <text class='axis-label' x='72' y='274'>SIGNAL 1</text><text class='axis-label' x='430' y='274'>SIGNAL 1,000</text><text class='axis-label' x='586' y='274'>CONTINUOUS</text>
+        <text class='band-label' x='118' y='116'>CRITICAL LEARNING PERIOD</text><text class='band-label' x='516' y='164'>STABLE REGIME</text>
+      </svg>
+      <p>The shaded band communicates policy intent, not fabricated coefficients. The final mathematical curve must be published before genesis.</p>
+    </figure>
+    <div class='safeguards'>
+      <article><span>01</span><h3>No transaction counter.</h3><p>A thousand trades do not equal a thousand valid signals.</p></article>
+      <article><span>02</span><h3>No balance voting.</h3><p>Token ownership does not provide direct model control.</p></article>
+      <article><span>03</span><h3>No hidden curve.</h3><p>The exact genesis weighting schedule must be published before signal one.</p></article>
+      <article><span>04</span><h3>No active counter yet.</h3><p>Murno remains pre-genesis until the mint, pool, policy and start slot are public.</p></article>
+    </div>
+  </section>
+
+  <section class='glass-panel' id='privacy'>
+    <header class='section-heading'>
+      <p class='section-label'>PRIVATE MODEL / PUBLIC HISTORY</p>
+      <h2>Verify the learning process without exposing the mind.</h2>
+      <p>Solana activity remains public. Wallets are pseudonymized before training, private weights stay on the training machine, and each completed epoch exposes only the evidence required for verification.</p>
+    </header>
+    <div class='privacy-map'>
+      <article class='inner-glass public-zone'><span>PUBLIC</span><h3>Anyone can verify</h3><ul><li>the slot window and policy version</li><li>accepted and rejected signal counts</li><li>the training-batch commitment</li><li>the previous and current epoch hashes</li><li>the Ed25519 publishing signature</li></ul></article>
+      <div class='privacy-boundary'><b>ONE-WAY PROOF BOUNDARY</b><span>aggregate evidence enters</span><i>&rarr;</i><span>signed commitments leave</span></div>
+      <article class='inner-glass private-zone'><span>PRIVATE</span><h3>Never published in full</h3><ul><li>raw wallet-to-actor mappings</li><li>private training checkpoints</li><li>model weights and latent state</li><li>infrastructure secrets and signing keys</li><li>future private memory and reasoning state</li></ul></article>
+    </div>
+    <aside class='clarity-box'><h3>This is model privacy, not transaction anonymity.</h3><p>Murno does not hide transfers, balances or public Solana history. It protects the contents of the learning system while making changes independently auditable.</p></aside>
+  </section>
+
+  <section class='glass-panel' id='proof'>
+    <header class='section-heading'>
+      <p class='section-label'>VERIFIABLE EPOCHS</p>
+      <h2>A model update cannot appear without a trace.</h2>
+      <p>Every epoch contains a deterministic commitment to its training batch, the previous epoch commitment and a digest of the private checkpoint.</p>
+    </header>
+    <div class='proof-flow'>
+      <article class='inner-glass'><span>INPUT</span><h3>Commit the accepted batch.</h3><p>The exact aggregate feature set produces one deterministic fingerprint.</p></article><i>&rarr;</i>
+      <article class='inner-glass'><span>STATE</span><h3>Link the previous epoch.</h3><p>A missing or replaced record creates a visible break in the chain.</p></article><i>&rarr;</i>
+      <article class='inner-glass'><span>AUTHORITY</span><h3>Sign the new record.</h3><p>Ed25519 proves which publishing key issued the epoch.</p></article>
+    </div>
+    <figure class='technical-figure epoch-chain' aria-labelledby='epoch-chain-title'>
+      <figcaption><span id='epoch-chain-title'>EPOCH CONTINUITY MAP</span><b>VERIFICATION STRUCTURE</b></figcaption>
+      <div class='chain-track'>
+        <article><span>EPOCH n-1</span><b>COMMITMENT</b><code>H(record)</code></article>
+        <i><small>previous</small>&rarr;</i>
+        <article class='chain-current'><span>EPOCH n</span><b>BATCH + STATE</b><code>H(previous || update)</code></article>
+        <i><small>previous</small>&rarr;</i>
+        <article><span>EPOCH n+1</span><b>NEXT RECORD</b><code>link required</code></article>
+      </div>
+      <div class='signature-rail'><span>SHA-256 CHAIN</span><i></i><b>ED25519 PUBLISHER SIGNATURE</b></div>
+    </figure>
+    <div class='schema'>
+      <div class='schema-title'><span>MURNO PUBLIC EPOCH V1</span><b>NO RECORDS BEFORE GENESIS</b></div>
+      <dl>
+        <div><dt>slot window</dt><dd>the confirmed market interval evaluated by the node</dd></div>
+        <div><dt>policy version</dt><dd>the validation rules used for this update</dd></div>
+        <div><dt>batch commitment</dt><dd>SHA-256 fingerprint of accepted aggregate features</dd></div>
+        <div><dt>checkpoint digest</dt><dd>fingerprint of the private model state</dd></div>
+        <div><dt>previous commitment</dt><dd>cryptographic link to the preceding epoch</dd></div>
+        <div><dt>publisher signature</dt><dd>Ed25519 proof attached to the immutable public record</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class='glass-panel' id='agency'>
+    <header class='section-heading'>
+      <p class='section-label'>WHAT THE MODEL CAN BECOME</p>
+      <h2>The market shapes preference, not unrestricted authority.</h2>
+      <p>The implemented model currently learns a private representation of market behavior. After genesis, that state is intended to guide which ideas Murno studies and communicates. It will not control custody or trade autonomously.</p>
+    </header>
+    <div class='boundary-grid'>
+      <article class='inner-glass can'><span>ALLOWED DIRECTION</span><ul><li>rank future research and experiments</li><li>adapt topics as validated preference changes</li><li>publish hypotheses and later reassess them</li><li>retain a continuous private preference state</li></ul></article>
+      <article class='inner-glass cannot'><span>FIXED BOUNDARIES</span><ul><li>no autonomous custody or token trading</li><li>no direct commands from a wallet balance</li><li>no policy changes inside an active epoch</li><li>no rewriting signed historical records</li></ul></article>
+    </div>
+    <aside class='truth-note'><strong>Current boundary</strong><p>Autonomous topic selection is not active in the present release. The current code trains and verifies the market-preference model that this future Agent layer will consume.</p></aside>
+  </section>
+
+  <section class='glass-panel' id='status'>
+    <header class='section-heading'>
+      <p class='section-label'>CURRENT STATE</p>
+      <h2>Built infrastructure. Zero invented Murno data.</h2>
+      <p>This status separates completed software from deployment facts that do not yet exist.</p>
+    </header>
+    <dl class='status-grid'>
+      <div><dt>project phase</dt><dd>pre-genesis</dd></div>
+      <div><dt>network target</dt><dd>Solana mainnet-beta</dd></div>
+      <div><dt>latest observed Solana slot</dt><dd id='block-number'>checking public RPC</dd></div>
+      <div><dt>protocol and signal engine</dt><dd>implemented and tested</dd></div>
+      <div><dt>continuous Solana node</dt><dd>implemented and tested</dd></div>
+      <div><dt>private training model</dt><dd>implemented baseline</dd></div>
+      <div><dt>signed epoch verifier</dt><dd>implemented and tested</dd></div>
+      <div><dt>token mint and pool</dt><dd>not published</dd></div>
+      <div><dt>production policy</dt><dd>not published</dd></div>
+      <div><dt>accepted signals and epochs</dt><dd>not started</dd></div>
+    </dl>
+    <div class='runtime-charts'>
+      <figure class='technical-figure slot-chart'>
+        <figcaption><span>LIVE SOLANA SLOT TRACE</span><b>THIS BROWSER SESSION</b></figcaption>
+        <canvas id='slot-trace' width='720' height='220' aria-label='Live Solana slot observations collected during this browser session'></canvas>
+        <p id='slot-trace-note'>Waiting for the first successful public RPC observation.</p>
+      </figure>
+      <figure class='technical-figure verification-chart'>
+        <figcaption><span>REFERENCE BUILD VERIFICATION</span><b>LAST LOCAL RUN</b></figcaption>
+        <div class='test-row'><div><span>PRIVATE MODEL</span><b>4 / 4</b></div><i><em style='width:100%'></em></i></div>
+        <div class='test-row'><div><span>PROTOCOL + NODE</span><b>13 / 13</b></div><i><em style='width:100%'></em></i></div>
+        <div class='test-total'><span>TOTAL PASS</span><b>17</b><small>ZERO FAILURES</small></div>
+        <p>These are software verification results, not market performance or live training activity.</p>
+      </figure>
+    </div>
+    <p class='status-note'><span id='rpc-dot'></span><span id='rpc-state'>solana / checking</span> &middot; Murno-specific counters remain inactive until real genesis.</p>
+  </section>
+
+  <section class='glass-panel faq' id='questions'>
+    <header class='section-heading'><p class='section-label'>COMMON QUESTIONS</p><h2>The short version.</h2></header>
+    <details open><summary>Does every trade train Murno?</summary><p>No. Trades are observations. Only completed windows that pass independence, persistence, liquidity and manipulation checks can influence the model.</p></details>
+    <details><summary>Can large holders control the Agent?</summary><p>No. Balance is not a vote. Influence is bounded, duplicate events are removed and related activity is evaluated together.</p></details>
+    <details><summary>Why do the first 1,000 valid signals matter?</summary><p>They form the finite high-plasticity period in which Murno's initial preference state develops. The exact curve must be public before genesis.</p></details>
+    <details><summary>What stays private?</summary><p>Wallet-to-actor mappings, training checkpoints, weights, latent state and infrastructure secrets. Public Solana transactions are not private.</p></details>
+    <details><summary>How can the public verify an update?</summary><p>Each record binds the batch, policy, prior epoch and checkpoint digest, then receives an Ed25519 signature. The verifier detects tampering and broken links.</p></details>
+    <details><summary>Is a Murno token live?</summary><p>No verified mint is published here. Any token claiming to be Murno before an official address is announced should be treated as unaffiliated.</p></details>
+  </section>
+
+  <section class='glass-panel final'>
+    <img src='murno.png' alt='' aria-hidden='true'>
+    <p>Observe the market. Validate the signal. Train the model. Prove the update.</p>
+    <span>MURNO / SOLANA / PRE-GENESIS</span>
+  </section>
+</main>
+
+<footer><div class='footer-inner'><span>&copy; 2026 Murno</span><span>Market-trained intelligence</span><span>Solana</span></div></footer>
+<script src='app.js?v=20260923-21'></script>
+</body>
+</html>
