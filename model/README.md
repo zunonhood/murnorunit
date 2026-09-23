@@ -9,7 +9,7 @@ from six aggregate market dimensions: activity, independent participation,
 distribution, conviction, persistence and liquidity. Every example is weighted
 by the bounded influence produced by the public protocol core.
 
-Raw wallets and transaction signatures are not model inputs. The private
+Raw wallets and transaction hashes are not model inputs. The private
 checkpoint remains on the training machine. A run emits a public receipt with a
 checkpoint digest, revision, observation count and loss metrics.
 

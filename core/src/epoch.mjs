@@ -15,8 +15,8 @@ export async function runEpoch({
 
   const evaluated = windows.map(window => ({
     id: window.id,
-    startSlot: window.startSlot,
-    endSlot: window.endSlot,
+    startBlock: window.startBlock,
+    endBlock: window.endBlock,
     result: evaluateSignal(window, policy)
   }));
   const accepted = evaluated.filter(signal => signal.result.influence > 0);

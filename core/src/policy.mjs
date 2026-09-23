@@ -1,6 +1,6 @@
 const REQUIRED_THRESHOLDS = [
   'minimumEvents', 'minimumIndependentActors', 'maximumActorConcentration',
-  'maximumReversalRate', 'minimumMedianHoldSlots', 'minimumMedianLiquidity',
+  'maximumReversalRate', 'minimumMedianHoldBlocks', 'minimumMedianLiquidity',
   'acceptConfidence', 'reviewConfidence', 'maximumSignalInfluence'
 ];
 const REQUIRED_WEIGHTS = ['persistence', 'distribution', 'liquidity', 'lowReversal'];
@@ -11,7 +11,7 @@ export function createPolicy(input) {
   for (const key of REQUIRED_THRESHOLDS) {
     if (!Number.isFinite(input[key])) throw new TypeError('Missing numeric policy field: ' + key);
   }
-  for (const key of ['minimumEvents', 'minimumIndependentActors', 'minimumMedianHoldSlots', 'minimumMedianLiquidity']) {
+  for (const key of ['minimumEvents', 'minimumIndependentActors', 'minimumMedianHoldBlocks', 'minimumMedianLiquidity']) {
     if (input[key] <= 0) throw new RangeError(key + ' must be greater than zero');
   }
   for (const key of ['maximumActorConcentration', 'maximumReversalRate', 'acceptConfidence', 'reviewConfidence']) {

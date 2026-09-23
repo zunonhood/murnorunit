@@ -13,13 +13,13 @@ import {
   MurnoRuntime
 } from '../src/index.mjs';
 
-function observation(signature, slot, overrides = {}) {
+function observation(transactionHash, blockNumber, overrides = {}) {
   return {
-    signature,
-    slot,
-    wallet: 'wallet-' + signature,
+    transactionHash,
+    blockNumber,
+    wallet: 'wallet-' + transactionHash,
     notional: 10,
-    holdSlots: 20,
+    holdBlocks: 20,
     liquidity: 500,
     reversed: false,
     ...overrides
@@ -32,7 +32,7 @@ const policy = createPolicy({
   minimumIndependentActors: 2,
   maximumActorConcentration: 0.6,
   maximumReversalRate: 0.5,
-  minimumMedianHoldSlots: 10,
+  minimumMedianHoldBlocks: 10,
   minimumMedianLiquidity: 100,
   acceptConfidence: 0.6,
   reviewConfidence: 0.4,
@@ -45,7 +45,7 @@ const policy = createPolicy({
   }
 });
 
-test('deduplicates events before building fixed slot windows', () => {
+test('deduplicates events before building fixed block windows', () => {
   const observations = [
     observation('a', 105),
     observation('a', 105),
@@ -53,7 +53,7 @@ test('deduplicates events before building fixed slot windows', () => {
     observation('c', 125)
   ];
   assert.equal(deduplicateObservations(observations).length, 3);
-  const windows = buildMarketWindows(observations, { genesisSlot: 100, windowSlots: 20 });
+  const windows = buildMarketWindows(observations, { genesisBlock: 100, windowBlocks: 20 });
   assert.equal(windows.length, 2);
   assert.deepEqual(windows.map(item => item.events.length), [2, 1]);
   assert.equal(windows[0].id, '100-119');
@@ -102,7 +102,7 @@ test('persists epochs and resumes their commitment chain', async () => {
       observation('one', 100, { actorId: 'one' }),
       observation('two', 101, { actorId: 'two' })
     ];
-    const windows = buildMarketWindows(events, { genesisSlot: 100, windowSlots: 20 });
+    const windows = buildMarketWindows(events, { genesisBlock: 100, windowBlocks: 20 });
     const first = await runtime.process({
       epoch: 0,
       windows,

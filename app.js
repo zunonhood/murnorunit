@@ -1,21 +1,21 @@
-const RPC_URL = 'https://api.mainnet-beta.solana.com';
+const RPC_URL = 'https://rpc.mainnet.chain.robinhood.com';
 document.title = 'Murno - The market trains the model';
 
 const rpcState = document.querySelector('#rpc-state');
 const rpcDot = document.querySelector('#rpc-dot');
 const blockNumber = document.querySelector('#block-number');
-const slotTrace = document.querySelector('#slot-trace');
-const slotTraceNote = document.querySelector('#slot-trace-note');
-const slotPoints = [];
+const blockTrace = document.querySelector('#block-trace');
+const blockTraceNote = document.querySelector('#block-trace-note');
+const blockPoints = [];
 
-function drawSlotTrace() {
-  if (!slotTrace) return;
+function drawBlockTrace() {
+  if (!blockTrace) return;
   const ratio = Math.min(window.devicePixelRatio || 1, 2);
-  const width = Math.max(1, slotTrace.clientWidth);
-  const height = Math.max(1, slotTrace.clientHeight);
-  slotTrace.width = Math.round(width * ratio);
-  slotTrace.height = Math.round(height * ratio);
-  const context = slotTrace.getContext('2d');
+  const width = Math.max(1, blockTrace.clientWidth);
+  const height = Math.max(1, blockTrace.clientHeight);
+  blockTrace.width = Math.round(width * ratio);
+  blockTrace.height = Math.round(height * ratio);
+  const context = blockTrace.getContext('2d');
   context.scale(ratio, ratio);
   context.clearRect(0, 0, width, height);
 
@@ -40,10 +40,10 @@ function drawSlotTrace() {
   }
   context.fillStyle = 'rgba(255,255,255,.34)';
   context.font = '8px ui-monospace, monospace';
-  context.fillText('SLOT', 10, padding.top + 3);
+  context.fillText('BLOCK', 8, padding.top + 3);
   context.fillText('SESSION TIME', width - 86, height - 10);
 
-  if (!slotPoints.length) {
+  if (!blockPoints.length) {
     context.fillStyle = 'rgba(255,255,255,.28)';
     context.textAlign = 'center';
     context.fillText('AWAITING PUBLIC RPC', width / 2, height / 2);
@@ -51,13 +51,13 @@ function drawSlotTrace() {
     return;
   }
 
-  const values = slotPoints.map(point => point.slot);
+  const values = blockPoints.map(point => point.block);
   const minimum = Math.min(...values);
   const maximum = Math.max(...values);
   const range = Math.max(1, maximum - minimum);
-  const coordinates = slotPoints.map((point, index) => ({
-    x: padding.left + (slotPoints.length === 1 ? plotWidth / 2 : plotWidth * index / (slotPoints.length - 1)),
-    y: padding.top + plotHeight - ((point.slot - minimum) / range) * plotHeight
+  const coordinates = blockPoints.map((point, index) => ({
+    x: padding.left + (blockPoints.length === 1 ? plotWidth / 2 : plotWidth * index / (blockPoints.length - 1)),
+    y: padding.top + plotHeight - ((point.block - minimum) / range) * plotHeight
   }));
 
   const gradient = context.createLinearGradient(0, padding.top, 0, height - padding.bottom);
@@ -86,16 +86,16 @@ function drawSlotTrace() {
   context.fill();
 }
 
-function recordSlot(slot) {
-  slotPoints.push({ slot, time: Date.now() });
-  if (slotPoints.length > 60) slotPoints.shift();
-  if (slotTraceNote) {
-    const delta = slotPoints.length > 1 ? slot - slotPoints[0].slot : 0;
-    slotTraceNote.textContent = slotPoints.length + ' real RPC observation' +
-      (slotPoints.length === 1 ? '' : 's') + ' / slot delta +' + delta.toLocaleString('en-US') +
+function recordBlock(block) {
+  blockPoints.push({ block, time: Date.now() });
+  if (blockPoints.length > 60) blockPoints.shift();
+  if (blockTraceNote) {
+    const delta = blockPoints.length > 1 ? block - blockPoints[0].block : 0;
+    blockTraceNote.textContent = blockPoints.length + ' real RPC observation' +
+      (blockPoints.length === 1 ? '' : 's') + ' / block delta +' + delta.toLocaleString('en-US') +
       ' / 30 second interval';
   }
-  drawSlotTrace();
+  drawBlockTrace();
 }
 
 async function readChain() {
@@ -108,20 +108,21 @@ async function readChain() {
       body: JSON.stringify({
         jsonrpc: '2.0',
         id: 1,
-        method: 'getSlot',
-        params: [{ commitment: 'confirmed' }]
+        method: 'eth_blockNumber',
+        params: []
       }),
       signal: controller.signal
     });
     const data = await response.json();
-    if (!data.result) throw new Error('No slot returned');
-    const slot = Number(data.result);
-    if (rpcState) rpcState.textContent = 'solana / online';
-    if (blockNumber) blockNumber.textContent = slot.toLocaleString('en-US');
+    if (!data.result) throw new Error('No block returned');
+    const block = Number.parseInt(data.result, 16);
+    if (!Number.isSafeInteger(block)) throw new Error('Invalid block returned');
+    if (rpcState) rpcState.textContent = 'robinhood chain / online';
+    if (blockNumber) blockNumber.textContent = block.toLocaleString('en-US');
     if (rpcDot) rpcDot.classList.add('online');
-    recordSlot(slot);
+    recordBlock(block);
   } catch {
-    if (rpcState) rpcState.textContent = 'solana / unavailable';
+    if (rpcState) rpcState.textContent = 'robinhood chain / unavailable';
     if (blockNumber) blockNumber.textContent = 'unavailable';
     if (rpcDot) rpcDot.classList.remove('online');
   } finally {
@@ -131,13 +132,13 @@ async function readChain() {
 
 readChain();
 setInterval(readChain, 30000);
-drawSlotTrace();
-window.addEventListener('resize', drawSlotTrace);
+drawBlockTrace();
+window.addEventListener('resize', drawBlockTrace);
 
 const localProjects = [
   {
     name: 'murno-protocol',
-    description: 'Market-signal evaluation, policy validation, epoch execution and Solana ingestion.',
+    description: 'Market-signal evaluation, policy validation, epoch execution and Robinhood Chain ingestion.',
     language: 'JavaScript',
     files: [
       'core/README.md',
@@ -147,7 +148,7 @@ const localProjects = [
       'core/src/evaluate.mjs',
       'core/src/commitment.mjs',
       'core/src/epoch.mjs',
-      'core/src/solana.mjs',
+      'core/src/robinhood.mjs',
       'core/src/ingest.mjs',
       'core/src/privacy.mjs',
       'core/src/trainer.mjs',
@@ -180,7 +181,7 @@ const localProjects = [
   },
   {
     name: 'murno-node',
-    description: 'Continuous Solana ingestion, balance decoding, recovery and epoch execution service.',
+    description: 'Continuous Robinhood Chain ingestion, ERC-20 decoding, recovery and epoch execution service.',
     language: 'JavaScript / Node.js',
     files: [
       'node/README.md',

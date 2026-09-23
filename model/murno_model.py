@@ -41,7 +41,7 @@ def feature_vector(features, policy):
         'independentActorCount',
         'actorConcentration',
         'reversalRate',
-        'medianHoldSlots',
+        'medianHoldBlocks',
         'medianLiquidity',
     )
     if any(name not in features for name in required):
@@ -51,7 +51,7 @@ def feature_vector(features, policy):
         _clamp(features['independentActorCount'] / (2.0 * policy['minimumIndependentActors'])),
         _clamp(1.0 - features['actorConcentration']),
         _clamp(1.0 - features['reversalRate']),
-        _clamp(features['medianHoldSlots'] / (2.0 * policy['minimumMedianHoldSlots'])),
+        _clamp(features['medianHoldBlocks'] / (2.0 * policy['minimumMedianHoldBlocks'])),
         _clamp(features['medianLiquidity'] / (2.0 * policy['minimumMedianLiquidity'])),
     ]
 

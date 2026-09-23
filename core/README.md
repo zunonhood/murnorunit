@@ -1,60 +1,45 @@
 # Murno protocol core
 
-Murno turns public Solana market activity into bounded training input for an AI
-agent. This directory contains the executable reference pipeline behind that
-claim. It is intentionally small enough to audit.
+Murno turns public Robinhood Chain market activity into bounded training input
+for an AI agent. This directory contains the executable reference pipeline.
 
 ## Pipeline
 
-1. solana.mjs reads confirmed slots, signatures and transactions from a
-   caller-selected Solana RPC endpoint.
-2. An ingestion service converts those transactions into fixed market windows.
-   Each event includes its transaction signature, wallet, notional amount,
-   holding duration and observed liquidity. An optional actorId lets an
-   identity-analysis service cluster related wallets.
+1. robinhood.mjs connects to Robinhood Chain mainnet through standard EVM
+   JSON-RPC and reads the chain ID, block height, contract logs, receipts and
+   ERC-20 pool balance.
+2. ingest.mjs normalizes decoded receipts, deduplicates events by transaction
+   hash and log index, and builds deterministic fixed-block windows.
 3. features.mjs derives distribution, persistence, liquidity and reversal
-   measurements from each window.
-4. evaluate.mjs applies a versioned policy and assigns an accepted, reduced or
-   rejected result. Influence is always capped by the supplied policy.
-5. epoch.mjs sends only non-zero signals to a model adapter and produces an
-   immutable epoch record.
-6. commitment.mjs canonicalizes that record and produces its SHA-256
-   commitment so consecutive epochs can form a verifiable chain.
+   measurements from each completed window.
+4. evaluate.mjs applies a versioned public policy and assigns an accepted,
+   reduced or rejected result. Influence is capped by policy.
+5. epoch.mjs sends only non-zero signals to the private model adapter and
+   produces an immutable epoch record.
+6. commitment.mjs canonicalizes the record and creates its SHA-256 commitment,
+   linking consecutive epochs into a verifiable history.
 
-Additional production-facing modules complete the reference runtime:
+Production-facing modules provide the remaining boundaries:
 
-- ingest.mjs normalizes decoded DEX observations, removes repeated transaction
-  events and builds deterministic fixed-slot windows.
-- privacy.mjs converts wallets into stable, domain-separated pseudonyms before
-  training data leaves the identity boundary.
-- trainer.mjs keeps private model state behind an adapter and exposes only
-  checkpoint and metric commitments.
+- privacy.mjs converts wallet addresses into stable, domain-separated
+  pseudonyms before training data leaves the identity boundary.
+- trainer.mjs keeps model state private and exposes checkpoint and metric
+  commitments only.
 - store.mjs writes immutable epoch records and advances the latest pointer
   atomically.
 - runtime.mjs resumes the previous commitment and refuses skipped epochs.
-- python-trainer.mjs starts the private Python trainer, sends only accepted
-  aggregate features over stdin and validates the returned checkpoint receipt.
-- audit.mjs verifies epoch commitments and chains, then signs valid epoch heads
-  with an Ed25519 publishing key for independent verification.
+- python-trainer.mjs sends accepted aggregate features to the private Python
+  trainer over stdin and validates the returned receipt.
+- audit.mjs verifies epoch commitments and chains, then signs valid epoch
+  heads with an Ed25519 publishing key.
 
-Transaction decoding is injected because every Solana venue has different
-instruction layouts. A decoder must produce the normalized observation shape;
-the deterministic pipeline after that boundary is implemented here.
+Robinhood Chain transaction decoding is implemented at the node boundary
+because EVM venues can route swaps through different contracts. The reference
+decoder uses actual ERC-20 Transfer logs and pool balances rather than
+displayed prices or fabricated activity.
 
-The core does not ship hidden production thresholds or pretend that deployment
-has happened. Production policy, token mint, program addresses, model weights
-and genesis slot must be published when they are finalized. Until then, the
-website describes Murno as pre-genesis.
-
-## Model adapter
-
-The training implementation is supplied through one narrow interface. Its
-update function receives the accepted training batch, prior private state and
-epoch context, then returns the next private state and optional metrics. The
-public epoch receives only digests and counts. This separation keeps market
-validation deterministic while allowing the model architecture, local GPU
-training stack or private Hugging Face checkpoint store to evolve
-independently.
+The core does not include hidden production thresholds. The token contract,
+pool, production policy and genesis block must be published when finalized.
 
 ## Run tests
 
@@ -62,6 +47,5 @@ Use Node.js 20 or newer:
 
     node --test core/test/*.test.mjs
 
-The tests use an explicitly named test policy and synthetic fixtures. Those
-values are not displayed as live protocol data and are not production
-configuration.
+Tests use an explicitly named policy and synthetic fixtures. Fixture values are
+not live protocol data or production configuration.

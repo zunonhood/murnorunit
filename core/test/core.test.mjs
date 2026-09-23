@@ -13,7 +13,7 @@ const policy = createPolicy({
   minimumIndependentActors: 4,
   maximumActorConcentration: 0.35,
   maximumReversalRate: 0.4,
-  minimumMedianHoldSlots: 10,
+  minimumMedianHoldBlocks: 10,
   minimumMedianLiquidity: 100,
   acceptConfidence: 0.7,
   reviewConfidence: 0.5,
@@ -28,11 +28,11 @@ const policy = createPolicy({
 
 function event(index, overrides = {}) {
   return {
-    signature: 'signature-' + index,
+    transactionHash: 'transaction-' + index,
     wallet: 'wallet-' + index,
     actorId: 'actor-' + index,
     notional: 100,
-    holdSlots: 20,
+    holdBlocks: 20,
     liquidity: 200,
     reversed: false,
     ...overrides
@@ -40,7 +40,7 @@ function event(index, overrides = {}) {
 }
 
 function window(id, events) {
-  return { id, startSlot: 100, endSlot: 120, events };
+  return { id, startBlock: 100, endBlock: 120, events };
 }
 
 test('clusters wallets that belong to one independent actor', () => {

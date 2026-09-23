@@ -10,7 +10,7 @@ const policy = {
   version: 'python-bridge-test-v1',
   minimumEvents: 2,
   minimumIndependentActors: 2,
-  minimumMedianHoldSlots: 10,
+  minimumMedianHoldBlocks: 10,
   minimumMedianLiquidity: 100
 };
 
@@ -32,7 +32,7 @@ test('trains the private Python model through the protocol adapter', async () =>
         independentActorCount: 6,
         actorConcentration: 0.2,
         reversalRate: 0.1,
-        medianHoldSlots: 30,
+        medianHoldBlocks: 30,
         medianLiquidity: 400
       }
     }];

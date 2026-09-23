@@ -1,5 +1,17 @@
-function rawAmount(balance) {
-  return BigInt(balance?.uiTokenAmount?.amount || '0');
+export const TRANSFER_TOPIC =
+  '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+
+function address(value, label) {
+  const normalized = String(value || '').toLowerCase();
+  if (!/^0x[0-9a-f]{40}$/.test(normalized)) throw new TypeError(label + ' must be an EVM address');
+  return normalized;
+}
+
+function topicAddress(topic) {
+  if (typeof topic !== 'string' || !/^0x[0-9a-f]{64}$/i.test(topic)) return null;
+  return '0x' + topic.slice(-40).toLowerCase();
 }
 
 function decimalAmount(raw, decimals) {
@@ -8,75 +20,88 @@ function decimalAmount(raw, decimals) {
   return value;
 }
 
-function balancesByOwner(transaction, mint) {
-  const before = new Map();
-  const after = new Map();
-  for (const balance of transaction.meta?.preTokenBalances || []) {
-    if (balance.mint === mint && balance.owner) before.set(balance.owner, balance);
-  }
-  for (const balance of transaction.meta?.postTokenBalances || []) {
-    if (balance.mint === mint && balance.owner) after.set(balance.owner, balance);
-  }
-  return { before, after };
+function addDelta(map, account, delta) {
+  if (account === ZERO_ADDRESS) return;
+  map.set(account, (map.get(account) || 0n) + delta);
 }
 
-function ownerDelta(owner, balances) {
-  const before = balances.before.get(owner);
-  const after = balances.after.get(owner);
-  const decimals = after?.uiTokenAmount?.decimals ?? before?.uiTokenAmount?.decimals;
-  if (!Number.isInteger(decimals)) return null;
-  const pre = rawAmount(before);
-  const post = rawAmount(after);
-  return { raw: post - pre, post, decimals };
+function transferDeltas(receipt, tokenAddress) {
+  const deltas = new Map();
+  for (const log of receipt.logs || []) {
+    if (String(log.address).toLowerCase() !== tokenAddress ||
+        String(log.topics?.[0]).toLowerCase() !== TRANSFER_TOPIC ||
+        log.topics.length < 3) continue;
+    const from = topicAddress(log.topics[1]);
+    const to = topicAddress(log.topics[2]);
+    if (!from || !to || typeof log.data !== 'string') continue;
+    const amount = BigInt(log.data);
+    addDelta(deltas, from, -amount);
+    addDelta(deltas, to, amount);
+  }
+  return deltas;
 }
 
-export class BalanceChangeDecoder {
-  constructor({ targetMint, quoteMint, poolOwner, tracker, minimumNotional = 0 }) {
-    if (!targetMint || !quoteMint || !poolOwner || !tracker) {
-      throw new TypeError('targetMint, quoteMint, poolOwner and tracker are required');
+export class Erc20TransferDecoder {
+  constructor({
+    targetToken,
+    quoteToken,
+    poolAddress,
+    targetDecimals,
+    quoteDecimals,
+    tracker,
+    minimumNotional = 0
+  }) {
+    this.targetToken = address(targetToken, 'targetToken');
+    this.quoteToken = address(quoteToken, 'quoteToken');
+    this.poolAddress = address(poolAddress, 'poolAddress');
+    if (!Number.isInteger(targetDecimals) || targetDecimals < 0 ||
+        !Number.isInteger(quoteDecimals) || quoteDecimals < 0) {
+      throw new TypeError('Token decimals must be non-negative integers');
     }
-    this.targetMint = targetMint;
-    this.quoteMint = quoteMint;
-    this.poolOwner = poolOwner;
+    if (!tracker) throw new TypeError('Position tracker is required');
+    this.targetDecimals = targetDecimals;
+    this.quoteDecimals = quoteDecimals;
     this.tracker = tracker;
     this.minimumNotional = minimumNotional;
   }
 
-  decode(transaction, entry) {
-    if (!transaction?.meta || transaction.meta.err) return [];
-    const signature = entry.signature;
-    const slot = transaction.slot;
-    if (!signature || !Number.isInteger(slot)) return [];
-    const target = balancesByOwner(transaction, this.targetMint);
-    const quote = balancesByOwner(transaction, this.quoteMint);
-    const poolQuote = ownerDelta(this.poolOwner, quote);
-    if (!poolQuote) return [];
-    const liquidity = decimalAmount(poolQuote.post, poolQuote.decimals);
-    if (liquidity <= 0) return [];
-    const owners = new Set([...target.before.keys(), ...target.after.keys()]);
-    owners.delete(this.poolOwner);
+  decode(receipt, { liquidityRaw } = {}) {
+    if (!receipt || receipt.status === '0x0' || !receipt.transactionHash) return [];
+    const blockNumber = Number.parseInt(receipt.blockNumber, 16);
+    if (!Number.isSafeInteger(blockNumber)) return [];
+    if (typeof liquidityRaw !== 'bigint' || liquidityRaw <= 0n) return [];
+    const target = transferDeltas(receipt, this.targetToken);
+    const quote = transferDeltas(receipt, this.quoteToken);
+    const wallets = new Set([...target.keys(), ...quote.keys()]);
+    wallets.delete(this.poolAddress);
+    wallets.delete(ZERO_ADDRESS);
+    const liquidity = decimalAmount(liquidityRaw, this.quoteDecimals);
     const observations = [];
-    let eventIndex = 0;
-    for (const wallet of owners) {
-      const tokenChange = ownerDelta(wallet, target);
-      const quoteChange = ownerDelta(wallet, quote);
-      if (!tokenChange || !quoteChange || tokenChange.raw === 0n || quoteChange.raw === 0n) continue;
-      if ((tokenChange.raw > 0n) === (quoteChange.raw > 0n)) continue;
-      const notional = Math.abs(decimalAmount(quoteChange.raw, quoteChange.decimals));
+    let logIndex = 0;
+    for (const wallet of wallets) {
+      const tokenDelta = target.get(wallet) || 0n;
+      const quoteDelta = quote.get(wallet) || 0n;
+      if (tokenDelta === 0n || quoteDelta === 0n ||
+          (tokenDelta > 0n) === (quoteDelta > 0n)) continue;
+      const notional = Math.abs(decimalAmount(quoteDelta, this.quoteDecimals));
       if (notional < this.minimumNotional) continue;
-      const remainingBalance = decimalAmount(tokenChange.post, tokenChange.decimals);
-      const side = tokenChange.raw > 0n ? 'buy' : 'sell';
-      const position = this.tracker.observe({ wallet, side, slot, remainingBalance });
+      const side = tokenDelta > 0n ? 'buy' : 'sell';
+      const position = this.tracker.observe({
+        wallet,
+        side,
+        blockNumber,
+        tokenDelta
+      });
       observations.push({
-        signature,
-        eventIndex: eventIndex++,
-        slot,
+        transactionHash: receipt.transactionHash.toLowerCase(),
+        logIndex: logIndex++,
+        blockNumber,
         wallet,
         notional,
-        holdSlots: position.holdSlots,
+        holdBlocks: position.holdBlocks,
         liquidity,
         reversed: position.reversed,
-        source: 'token-balance-delta:' + side
+        source: 'erc20-transfer-delta:' + side
       });
     }
     return observations;

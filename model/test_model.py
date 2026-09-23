@@ -30,13 +30,13 @@ class MurnoModelTests(unittest.TestCase):
             'independentActorCount': 8,
             'actorConcentration': 0.2,
             'reversalRate': 0.1,
-            'medianHoldSlots': 50,
+            'medianHoldBlocks': 50,
             'medianLiquidity': 1000,
         }
         policy = {
             'minimumEvents': 5,
             'minimumIndependentActors': 4,
-            'minimumMedianHoldSlots': 25,
+            'minimumMedianHoldBlocks': 25,
             'minimumMedianLiquidity': 500,
         }
         values = feature_vector(features, policy)

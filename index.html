@@ -3,13 +3,13 @@
 <head>
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <meta name='description' content='Murno is a private AI model trained by validated Solana market behavior, with a public and verifiable learning history.'>
+  <meta name='description' content='Murno is a private AI model trained by validated Robinhood Chain market behavior, with a public and verifiable learning history.'>
   <meta name='theme-color' content='#000000'>
   <title>Murno - The market trains the model</title>
   <link rel='icon' type='image/png' sizes='600x600' href='murno.png?v=20260923-1'>
   <link rel='shortcut icon' type='image/png' href='murno.png?v=20260923-1'>
   <link rel='apple-touch-icon' href='murno.png?v=20260923-1'>
-  <link rel='stylesheet' href='styles.css?v=20260923-23'>
+  <link rel='stylesheet' href='styles.css?v=20260923-24'>
 </head>
 <body>
 <header class='topbar'>
@@ -64,7 +64,7 @@
 <main id='top'>
   <section class='glass-panel hero'>
     <img class='hero-mark' src='murno.png' alt='Murno logo'>
-    <p class='eyebrow'>A MARKET-TRAINED AI AGENT ON SOLANA</p>
+    <p class='eyebrow'>A MARKET-TRAINED AI AGENT ON ROBINHOOD CHAIN</p>
     <h1>The market trains Murno.</h1>
     <p class='hero-copy'>Murno is a private AI model that learns from validated behavior around its own token. Its internal state stays private. Its learning history remains public and verifiable.</p>
     <div class='definition-card inner-glass'>
@@ -90,25 +90,25 @@
       <article class='inner-glass'><span>02</span><h3>The signal engine is the filter.</h3><p>Related wallets, rapid reversals, weak liquidity and repeated events are grouped, reduced or rejected.</p></article>
       <article class='inner-glass'><span>03</span><h3>The model is the learner.</h3><p>Accepted aggregate features update a private market-preference representation. No wallet can directly edit the model.</p></article>
     </div>
-    <aside class='truth-note'><strong>What exists now</strong><p>The reference protocol, continuous Solana node, private training model, recovery system and signed epoch verifier are implemented and testable. The token, pool, production policy and genesis slot are not yet published.</p></aside>
+    <aside class='truth-note'><strong>What exists now</strong><p>The Robinhood Chain reference protocol, continuous EVM node, private training model, recovery system and signed epoch verifier are implemented and testable. The token contract, pool, production policy and genesis block are not yet published.</p></aside>
   </section>
 
   <section class='glass-panel' id='how'>
     <header class='section-heading'>
       <p class='section-label'>THE WORKING PIPELINE</p>
-      <h2>From a confirmed Solana transaction to a signed learning epoch.</h2>
+      <h2>From a confirmed Robinhood Chain transaction to a signed learning epoch.</h2>
       <p>The current implementation closes the full software loop without displaying simulated Murno activity.</p>
     </header>
     <div class='pipeline' aria-label='Murno runtime pipeline'>
-      <article><span>01 / READ</span><h3>Follow the real pool address</h3><p>The node paginates confirmed signatures and resumes from a durable cursor.</p><small>RPC failures do not advance the cursor.</small></article>
-      <article><span>02 / DECODE</span><h3>Measure balance changes</h3><p>Opposing target-token and quote-token balance changes identify candidate trades.</p><small>Pool quote balance supplies the liquidity observation.</small></article>
-      <article><span>03 / VALIDATE</span><h3>Build and test a slot window</h3><p>Duplicate events are removed and aggregate behavior is checked against a versioned policy.</p><small>Signals are accepted, reduced or rejected.</small></article>
+      <article><span>01 / READ</span><h3>Follow the token contract</h3><p>The node scans confirmed ERC-20 Transfer logs and resumes from a durable block cursor.</p><small>RPC failures do not advance the cursor.</small></article>
+      <article><span>02 / DECODE</span><h3>Measure transfer deltas</h3><p>Opposing token and quote-asset flows identify candidate market actions.</p><small>The pool's onchain quote balance supplies the liquidity observation.</small></article>
+      <article><span>03 / VALIDATE</span><h3>Build and test a block window</h3><p>Duplicate events are removed and aggregate behavior is checked against a versioned policy.</p><small>Signals are accepted, reduced or rejected.</small></article>
       <article><span>04 / TRAIN</span><h3>Update the private model</h3><p>Only accepted aggregate features cross the private training boundary.</p><small>Raw wallets and private weights are not published.</small></article>
       <article><span>05 / PUBLISH</span><h3>Commit and sign the epoch</h3><p>The record links to the previous epoch and is signed with Ed25519.</p><small>Third parties can detect tampering or a broken history.</small></article>
     </div>
     <div class='explain-grid'>
-      <article class='inner-glass'><h3>Confirmed plus a safety lag</h3><p>The node reads confirmed transactions, then waits a configurable number of additional slots before closing a learning window.</p></article>
-      <article class='inner-glass'><h3>Failure-safe by design</h3><p>Pending observations, position state and the last processed signature survive restart. An incomplete poll cannot silently skip history.</p></article>
+      <article class='inner-glass'><h3>Confirmed plus a safety lag</h3><p>The node reads Robinhood Chain logs, then waits a configurable number of additional blocks before closing a learning window.</p></article>
+      <article class='inner-glass'><h3>Failure-safe by design</h3><p>Pending observations, position state and the last processed block survive restart. An incomplete poll cannot silently skip history.</p></article>
     </div>
   </section>
 
@@ -191,7 +191,7 @@
       <article><span>01</span><h3>No transaction counter.</h3><p>A thousand trades do not equal a thousand valid signals.</p></article>
       <article><span>02</span><h3>No balance voting.</h3><p>Token ownership does not provide direct model control.</p></article>
       <article><span>03</span><h3>No hidden curve.</h3><p>The exact genesis weighting schedule must be published before signal one.</p></article>
-      <article><span>04</span><h3>No active counter yet.</h3><p>Murno remains pre-genesis until the mint, pool, policy and start slot are public.</p></article>
+      <article><span>04</span><h3>No active counter yet.</h3><p>Murno remains pre-genesis until the contract, pool, policy and start block are public.</p></article>
     </div>
   </section>
 
@@ -199,14 +199,14 @@
     <header class='section-heading'>
       <p class='section-label'>PRIVATE MODEL / PUBLIC HISTORY</p>
       <h2>Verify the learning process without exposing the mind.</h2>
-      <p>Solana activity remains public. Wallets are pseudonymized before training, private weights stay on the training machine, and each completed epoch exposes only the evidence required for verification.</p>
+      <p>Robinhood Chain activity remains public. Wallets are pseudonymized before training, private weights stay on the training machine, and each completed epoch exposes only the evidence required for verification.</p>
     </header>
     <div class='privacy-map'>
-      <article class='inner-glass public-zone'><span>PUBLIC</span><h3>Anyone can verify</h3><ul><li>the slot window and policy version</li><li>accepted and rejected signal counts</li><li>the training-batch commitment</li><li>the previous and current epoch hashes</li><li>the Ed25519 publishing signature</li></ul></article>
+      <article class='inner-glass public-zone'><span>PUBLIC</span><h3>Anyone can verify</h3><ul><li>the block window and policy version</li><li>accepted and rejected signal counts</li><li>the training-batch commitment</li><li>the previous and current epoch hashes</li><li>the Ed25519 publishing signature</li></ul></article>
       <div class='privacy-boundary'><b>ONE-WAY PROOF BOUNDARY</b><span>aggregate evidence enters</span><i>&rarr;</i><span>signed commitments leave</span></div>
       <article class='inner-glass private-zone'><span>PRIVATE</span><h3>Never published in full</h3><ul><li>raw wallet-to-actor mappings</li><li>private training checkpoints</li><li>model weights and latent state</li><li>infrastructure secrets and signing keys</li><li>future private memory and reasoning state</li></ul></article>
     </div>
-    <aside class='clarity-box'><h3>This is model privacy, not transaction anonymity.</h3><p>Murno does not hide transfers, balances or public Solana history. It protects the contents of the learning system while making changes independently auditable.</p></aside>
+    <aside class='clarity-box'><h3>This is model privacy, not transaction anonymity.</h3><p>Murno does not hide transfers, balances or public Robinhood Chain history. It protects the contents of the learning system while making changes independently auditable.</p></aside>
   </section>
 
   <section class='glass-panel' id='proof'>
@@ -234,7 +234,7 @@
     <div class='schema'>
       <div class='schema-title'><span>MURNO PUBLIC EPOCH V1</span><b>NO RECORDS BEFORE GENESIS</b></div>
       <dl>
-        <div><dt>slot window</dt><dd>the confirmed market interval evaluated by the node</dd></div>
+        <div><dt>block window</dt><dd>the confirmed market interval evaluated by the node</dd></div>
         <div><dt>policy version</dt><dd>the validation rules used for this update</dd></div>
         <div><dt>batch commitment</dt><dd>SHA-256 fingerprint of accepted aggregate features</dd></div>
         <div><dt>checkpoint digest</dt><dd>fingerprint of the private model state</dd></div>
@@ -265,21 +265,21 @@
     </header>
     <dl class='status-grid'>
       <div><dt>project phase</dt><dd>pre-genesis</dd></div>
-      <div><dt>network target</dt><dd>Solana mainnet-beta</dd></div>
-      <div><dt>latest observed Solana slot</dt><dd id='block-number'>checking public RPC</dd></div>
+      <div><dt>network target</dt><dd>Robinhood Chain mainnet / chain ID 4663</dd></div>
+      <div><dt>latest observed block</dt><dd id='block-number'>checking public RPC</dd></div>
       <div><dt>protocol and signal engine</dt><dd>implemented and tested</dd></div>
-      <div><dt>continuous Solana node</dt><dd>implemented and tested</dd></div>
+      <div><dt>continuous Robinhood Chain node</dt><dd>implemented and tested</dd></div>
       <div><dt>private training model</dt><dd>implemented baseline</dd></div>
       <div><dt>signed epoch verifier</dt><dd>implemented and tested</dd></div>
-      <div><dt>token mint and pool</dt><dd>not published</dd></div>
+      <div><dt>token contract and pool</dt><dd>not published</dd></div>
       <div><dt>production policy</dt><dd>not published</dd></div>
       <div><dt>accepted signals and epochs</dt><dd>not started</dd></div>
     </dl>
     <div class='runtime-charts'>
-      <figure class='technical-figure slot-chart'>
-        <figcaption><span>LIVE SOLANA SLOT TRACE</span><b>THIS BROWSER SESSION</b></figcaption>
-        <canvas id='slot-trace' width='720' height='220' aria-label='Live Solana slot observations collected during this browser session'></canvas>
-        <p id='slot-trace-note'>Waiting for the first successful public RPC observation.</p>
+      <figure class='technical-figure block-chart'>
+        <figcaption><span>LIVE ROBINHOOD CHAIN BLOCK TRACE</span><b>THIS BROWSER SESSION</b></figcaption>
+        <canvas id='block-trace' width='720' height='220' aria-label='Live Robinhood Chain block observations collected during this browser session'></canvas>
+        <p id='block-trace-note'>Waiting for the first successful public RPC observation.</p>
       </figure>
       <figure class='technical-figure verification-chart'>
         <figcaption><span>REFERENCE BUILD VERIFICATION</span><b>LAST LOCAL RUN</b></figcaption>
@@ -289,7 +289,7 @@
         <p>These are software verification results, not market performance or live training activity.</p>
       </figure>
     </div>
-    <p class='status-note'><span id='rpc-dot'></span><span id='rpc-state'>solana / checking</span> &middot; Murno-specific counters remain inactive until real genesis.</p>
+    <p class='status-note'><span id='rpc-dot'></span><span id='rpc-state'>robinhood chain / checking</span> &middot; Murno-specific counters remain inactive until real genesis.</p>
   </section>
 
   <section class='glass-panel faq' id='questions'>
@@ -297,15 +297,15 @@
     <details open><summary>Does every trade train Murno?</summary><p>No. Trades are observations. Only completed windows that pass independence, persistence, liquidity and manipulation checks can influence the model.</p></details>
     <details><summary>Can large holders control the Agent?</summary><p>No. Balance is not a vote. Influence is bounded, duplicate events are removed and related activity is evaluated together.</p></details>
     <details><summary>Why do the first 1,000 valid signals matter?</summary><p>They form the finite high-plasticity period in which Murno's initial preference state develops. The exact curve must be public before genesis.</p></details>
-    <details><summary>What stays private?</summary><p>Wallet-to-actor mappings, training checkpoints, weights, latent state and infrastructure secrets. Public Solana transactions are not private.</p></details>
+    <details><summary>What stays private?</summary><p>Wallet-to-actor mappings, training checkpoints, weights, latent state and infrastructure secrets. Public Robinhood Chain transactions are not private.</p></details>
     <details><summary>How can the public verify an update?</summary><p>Each record binds the batch, policy, prior epoch and checkpoint digest, then receives an Ed25519 signature. The verifier detects tampering and broken links.</p></details>
-    <details><summary>Is a Murno token live?</summary><p>No verified mint is published here. Any token claiming to be Murno before an official address is announced should be treated as unaffiliated.</p></details>
+    <details><summary>Is a Murno token live?</summary><p>No verified Robinhood Chain contract is published here. Any token claiming to be Murno before an official address is announced should be treated as unaffiliated.</p></details>
   </section>
 
   <section class='glass-panel final'>
     <img src='murno.png' alt='' aria-hidden='true'>
     <p>Observe the market. Validate the signal. Train the model. Prove the update.</p>
-    <span>MURNO / SOLANA / PRE-GENESIS</span>
+    <span>MURNO / ROBINHOOD CHAIN / PRE-GENESIS</span>
   </section>
 </main>
 
@@ -323,7 +323,11 @@
     <div class='token-data'>
       <div class='token-data-row'>
         <span>NETWORK</span>
-        <strong><i class='token-status-dot'></i>SOLANA</strong>
+        <strong><i class='token-status-dot'></i>ROBINHOOD CHAIN</strong>
+      </div>
+      <div class='token-data-row'>
+        <span>CHAIN ID</span>
+        <strong>4663</strong>
       </div>
       <div class='token-data-row'>
         <span>PHASE</span>
@@ -343,7 +347,7 @@
   </button>
 </aside>
 
-<footer><div class='footer-inner'><span>&copy; 2026 Murno</span><span>Market-trained intelligence</span><span>Solana</span></div></footer>
-<script src='app.js?v=20260923-22'></script>
+<footer><div class='footer-inner'><span>&copy; 2026 Murno</span><span>Market-trained intelligence</span><span>Robinhood Chain</span></div></footer>
+<script src='app.js?v=20260923-24'></script>
 </body>
 </html>

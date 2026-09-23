@@ -7,15 +7,16 @@ import {
   FileEpochStore,
   MurnoRuntime,
   PythonTrainerAdapter,
-  SolanaReader
+  RobinhoodReader
 } from '../core/src/index.mjs';
-import { BalanceChangeDecoder } from './src/balance-decoder.mjs';
+import { Erc20TransferDecoder } from './src/balance-decoder.mjs';
 import { ContinuousMurnoNode } from './src/continuous-node.mjs';
 import { PositionTracker } from './src/position-tracker.mjs';
 import { JsonStateStore } from './src/state-store.mjs';
 import { SignedEpochPublisher } from './src/epoch-publisher.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
+const ROBINHOOD_MAINNET_CHAIN_ID = 4663;
 
 function required(name) {
   const value = process.env[name];
@@ -35,6 +36,14 @@ function positiveInteger(name, fallback) {
   return value;
 }
 
+function requiredInteger(name) {
+  const value = Number(required(name));
+  if (!Number.isInteger(value) || value < 0) {
+    throw new Error('Invalid integer environment variable: ' + name);
+  }
+  return value;
+}
+
 function positiveNumber(name, fallback) {
   const value = process.env[name] === undefined ? fallback : Number(process.env[name]);
   if (!Number.isFinite(value) || value <= 0) throw new Error('Invalid numeric environment variable: ' + name);
@@ -43,15 +52,17 @@ function positiveNumber(name, fallback) {
 
 async function createNode() {
   const dataDirectory = required('MURNO_DATA_DIR');
-  const policy = createPolicy(JSON.parse(
-    await readFile(required('MURNO_POLICY_PATH'), 'utf8')
-  ));
+  const policy = createPolicy(JSON.parse(await readFile(required('MURNO_POLICY_PATH'), 'utf8')));
   const tracker = new PositionTracker({
-    reversalSlots: positiveInteger('MURNO_REVERSAL_SLOTS', 150)
+    reversalBlocks: positiveInteger('MURNO_REVERSAL_BLOCKS', 150)
   });
-  const reader = new SolanaReader(
-    process.env.MURNO_RPC_URL || 'https://api.mainnet-beta.solana.com'
+  const reader = new RobinhoodReader(
+    process.env.MURNO_RPC_URL || 'https://rpc.mainnet.chain.robinhood.com'
   );
+  const chainId = await reader.getChainId();
+  if (chainId !== ROBINHOOD_MAINNET_CHAIN_ID) {
+    throw new Error('RPC chain ID ' + chainId + ' does not match Robinhood Chain mainnet 4663');
+  }
   const model = new PythonTrainerAdapter({
     policy,
     checkpointPath: join(dataDirectory, 'private', 'model-checkpoint.json'),
@@ -65,10 +76,12 @@ async function createNode() {
     model,
     store: new FileEpochStore(join(dataDirectory, 'epochs'))
   });
-  const decoder = new BalanceChangeDecoder({
-    targetMint: required('MURNO_TOKEN_MINT'),
-    quoteMint: required('MURNO_QUOTE_MINT'),
-    poolOwner: required('MURNO_POOL_OWNER'),
+  const decoder = new Erc20TransferDecoder({
+    targetToken: required('MURNO_TOKEN_ADDRESS'),
+    quoteToken: required('MURNO_QUOTE_TOKEN_ADDRESS'),
+    poolAddress: required('MURNO_POOL_ADDRESS'),
+    targetDecimals: integer('MURNO_TOKEN_DECIMALS', 18),
+    quoteDecimals: integer('MURNO_QUOTE_DECIMALS', 18),
     tracker,
     minimumNotional: positiveNumber('MURNO_MINIMUM_NOTIONAL', 0.000001)
   });
@@ -77,18 +90,17 @@ async function createNode() {
     runtime,
     decoder,
     tracker,
-    stateStore: new JsonStateStore(join(dataDirectory, 'node-state.json')),
+    stateStore: new JsonStateStore(join(dataDirectory, 'robinhood-node-state.json')),
     publisher: new SignedEpochPublisher({
       directory: join(dataDirectory, 'public'),
       privateKeyPath: required('MURNO_SIGNING_KEY_PATH')
     }),
-    monitorAddress: required('MURNO_MONITOR_ADDRESS'),
     actorResolver: createActorPseudonymizer(required('MURNO_ACTOR_SECRET')),
-    windowSlots: positiveInteger('MURNO_WINDOW_SLOTS', 1200),
-    genesisSlot: integer('MURNO_GENESIS_SLOT', 0),
-    finalityLagSlots: integer('MURNO_FINALITY_LAG_SLOTS', 32),
-    pageSize: positiveInteger('MURNO_RPC_PAGE_SIZE', 1000),
-    maxPages: positiveInteger('MURNO_RPC_MAX_PAGES', 20)
+    windowBlocks: positiveInteger('MURNO_WINDOW_BLOCKS', 1200),
+    genesisBlock: requiredInteger('MURNO_GENESIS_BLOCK'),
+    finalityLagBlocks: integer('MURNO_FINALITY_LAG_BLOCKS', 20),
+    blockRange: positiveInteger('MURNO_RPC_BLOCK_RANGE', 2000),
+    maxRanges: positiveInteger('MURNO_RPC_MAX_RANGES', 20)
   });
 }
 
@@ -107,9 +119,7 @@ async function main() {
   const runOnce = process.env.MURNO_RUN_ONCE === 'true';
   let stopped = false;
   let failures = 0;
-  const stop = () => {
-    stopped = true;
-  };
+  const stop = () => { stopped = true; };
   process.on('SIGINT', stop);
   process.on('SIGTERM', stop);
 

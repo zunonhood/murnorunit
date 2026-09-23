@@ -8,11 +8,11 @@ export function evaluateSignal(window, policy) {
     enoughIndependentActors: features.independentActorCount >= policy.minimumIndependentActors,
     distributedActors: features.actorConcentration <= policy.maximumActorConcentration,
     acceptableReversal: features.reversalRate <= policy.maximumReversalRate,
-    persistentPositions: features.medianHoldSlots >= policy.minimumMedianHoldSlots,
+    persistentPositions: features.medianHoldBlocks >= policy.minimumMedianHoldBlocks,
     usableLiquidity: features.medianLiquidity >= policy.minimumMedianLiquidity
   };
   const components = {
-    persistence: clamp(features.medianHoldSlots / policy.minimumMedianHoldSlots),
+    persistence: clamp(features.medianHoldBlocks / policy.minimumMedianHoldBlocks),
     distribution: clamp(1 - features.actorConcentration / policy.maximumActorConcentration),
     liquidity: clamp(features.medianLiquidity / policy.minimumMedianLiquidity),
     lowReversal: clamp(1 - features.reversalRate / policy.maximumReversalRate)

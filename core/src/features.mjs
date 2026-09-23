@@ -7,15 +7,15 @@ function median(values) {
 
 export function validateMarketWindow(window) {
   if (!window || !Array.isArray(window.events)) throw new TypeError('Market window events are required');
-  if (!Number.isInteger(window.startSlot) || !Number.isInteger(window.endSlot)) throw new TypeError('Window slots must be integers');
-  if (window.endSlot < window.startSlot) throw new RangeError('Window slot order is invalid');
+  if (!Number.isInteger(window.startBlock) || !Number.isInteger(window.endBlock)) throw new TypeError('Window blocks must be integers');
+  if (window.endBlock < window.startBlock) throw new RangeError('Window block order is invalid');
   const eventKeys = new Set();
   for (const event of window.events) {
-    if (!event.signature || !event.wallet) throw new TypeError('Every event requires a signature and wallet');
-    const eventKey = event.signature + ':' + (Number.isInteger(event.eventIndex) ? event.eventIndex : 0);
+    if (!event.transactionHash || !event.wallet) throw new TypeError('Every event requires a transactionHash and wallet');
+    const eventKey = event.transactionHash + ':' + (Number.isInteger(event.logIndex) ? event.logIndex : 0);
     if (eventKeys.has(eventKey)) throw new RangeError('Duplicate market event: ' + eventKey);
     eventKeys.add(eventKey);
-    for (const field of ['notional', 'holdSlots', 'liquidity']) {
+    for (const field of ['notional', 'holdBlocks', 'liquidity']) {
       if (!Number.isFinite(event[field]) || event[field] < 0) throw new TypeError('Invalid event field: ' + field);
     }
   }
@@ -47,7 +47,7 @@ export function extractFeatures(window) {
     totalNotional,
     actorConcentration,
     reversalRate: window.events.length ? reversed / window.events.length : 0,
-    medianHoldSlots: median(window.events.map(event => event.holdSlots)),
+    medianHoldBlocks: median(window.events.map(event => event.holdBlocks)),
     medianLiquidity: median(window.events.map(event => event.liquidity))
   });
 }
